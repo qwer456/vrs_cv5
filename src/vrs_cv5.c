@@ -54,24 +54,28 @@ while(ADC_GetFlagStatus(ADC1, ADC_FLAG_ADONS) == RESET)   {   }
 /* Start ADC Software Conversion */
 ADC_SoftwareStartConv(ADC1); }
 
-void led(void)
-{
-	GPIO_InitTypeDef      GPIO_InitStructure;
-	/*Configure LED*/
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-}
+
 
 void irq(void){
-	  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+	//  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
 	  NVIC_InitTypeDef NVIC_InitStructure;
-	  NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn; //zoznam prerušení nájdete v       súbore stm32l1xx.h
+	  NVIC_InitStructure.NVIC_IRQChannel = ADC1_IRQn; //zoznam prerušení nájdete v       súbore stm32l1xx.h
 	  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	  NVIC_Init(&NVIC_InitStructure);
+	  ADC_ITConfig(ADC1, ADC_IT_EOC, ENABLE);
+}
+
+
+
+void ADC1_IRQHandler(void)
+{
+	if(ADC1->SR & ADC_SR_EOC){	//osetrenie ci sa jedna o moje prerusenie EOC
+		value = ADC1->DR;
+		//flag EOC sa resetuje automaticky po precitani hodnoty, preto ho nemusim tu -> prerusnie ma byt rychle
+		//ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
+	}
+
+
 }

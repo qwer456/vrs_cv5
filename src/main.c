@@ -49,15 +49,15 @@ SOFTWARE.
 int main(void)
 {
 	int i = 0;
-	uint16_t vstup;
-
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+	//uint16_t vstup;
+	volatile uint16_t vstup;
+	//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
 	irg();
 
-	void ADC_ITConfig(ADC_TypeDef* ADCx, uint16_t ADC_IT, FunctionalState NewState);
+//	void ADC_ITConfig(ADC_TypeDef* ADC1, uint16_t ADC_IT, FunctionalState NewState);
 
 	// Na overenie zdroja prerušenia v prípade ADC použijete funkciu  FlagStatus
-	ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint16_t ADC_FLAG);
+	//ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint16_t ADC_FLAG);
 
 	/**
 	 *  IMPORTANT NOTE!
@@ -87,7 +87,7 @@ int main(void)
 	/* Infinite loop */
 	while (1)
 	{
-		vstup = nacitaj();
+		//vstup = nacitaj(); vstup sa bude menit vofunkcii prerusenia
 		blikaj(vstup);
 		GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
 		i++;
