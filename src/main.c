@@ -50,9 +50,7 @@ int main(void)
 {
 	int i = 0;
 	//uint16_t vstup;
-	volatile uint16_t vstup;
-	//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
-	//irg();
+	volatile uint16_t vstup = 450;
 
 //	void ADC_ITConfig(ADC_TypeDef* ADC1, uint16_t ADC_IT, FunctionalState NewState);
 
@@ -81,15 +79,21 @@ int main(void)
 
 	/* Infinite loop */
 	adc_init();
+	adc_irq();
 	led();
+
+
+	Usart();
+	USART_IRQ();
+
 
 
 	/* Infinite loop */
 	while (1)
 	{
-		//vstup = nacitaj(); vstup sa bude menit vofunkcii prerusenia
+	//	vstup = nacitaj();// vstup sa bude menit vofunkcii prerusenia
 		blikaj(vstup);
-		GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
+		GPIO_ToggleBits(GPIOA, GPIO_Pin_5);	//zmena stavu
 		i++;
 	}
 	return 0;
