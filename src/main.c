@@ -52,7 +52,7 @@ int main(void)
 	//uint16_t vstup;
 	volatile uint16_t vstup;
 	//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
-	irg();
+	//irg();
 
 //	void ADC_ITConfig(ADC_TypeDef* ADC1, uint16_t ADC_IT, FunctionalState NewState);
 
