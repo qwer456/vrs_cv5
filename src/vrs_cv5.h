@@ -21,4 +21,7 @@ void USART1_IRQHandler(void);			//prerusenie USART
 void USART_IRQ(void);					//inicializacia USART preruseni
 void Usart(void);						//GPIO USART
 
+
+void ParseData(void);
+
 #endif /* VRS_CV5_H_ */

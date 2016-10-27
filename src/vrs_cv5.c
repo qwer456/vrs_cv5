@@ -8,6 +8,8 @@
 #include "vrs_cv5.h"
 
 volatile uint16_t vstup;
+uint8_t stoj = 0;
+uint8_t buffer[5][2];
 
 void blikaj(uint16_t AD_value)
 {
@@ -104,7 +106,8 @@ void led(void)
 
 void USART1_IRQHandler(void)		//startup_stm32l1xx_hd.s
 {
-	static uint8_t buffer[]={"2.93V"};
+	//static uint8_t buffer[]={"2.93V"};
+	static uint8_t poc=0;
 	//	static uint8_t buffer[]={"2.93V"};
 	if(USART1->SR & USART_FLAG_RXNE)
 	{
@@ -113,16 +116,24 @@ void USART1_IRQHandler(void)		//startup_stm32l1xx_hd.s
 	}
 
 	if(USART1->SR & USART_FLAG_TC){
-		//UART fo formáte "3.30V"
-		buffer[0] = vstup/1000  + '0';
-		buffer[1] = (vstup/100) % 10  + '0';
-		buffer[2] = (vstup/10) % 10  + '0';
-		buffer[3] = vstup % 10  + '0';
-		buffer[4] = '\n';
 
+		USART_ClearFlag(USART1, USART_FLAG_TC);
+		//odosielame data
+		USART_SendData(USART1, buffer[poc][stoj]);
+		poc++;
+		if(poc>=(5)){			//odosielame 5 znakov..
+			poc=0;
+			if(stoj){
+				stoj = 0;
+			}
+			else{
+				stoj = 1;
+			}
+
+
+		}
 
 	}
-
 }
 void Usart(void)
 {
@@ -140,4 +151,17 @@ void USART_IRQ(void){
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 	USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
 }
+void ParseData(void)
+{
+	static uint8_t stoj2 = 1;
 
+	if(stoj2 != stoj)
+	{
+		buffer[0][stoj] = vstup/1000  + '0';
+		buffer[1][stoj] = (vstup/100) % 10  + '0';
+		buffer[2][stoj] = (vstup/10) % 10  + '0';
+		buffer[3][stoj] = vstup % 10  + '0';
+		buffer[4][stoj] = '\n';
+
+	}
+}

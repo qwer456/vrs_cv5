@@ -78,6 +78,10 @@ int main(void)
 
 
 	/* Infinite loop */
+
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+
+
 	adc_init();
 	adc_irq();
 	led();
@@ -92,6 +96,10 @@ int main(void)
 	while (1)
 	{
 	//	vstup = nacitaj();// vstup sa bude menit vofunkcii prerusenia
+
+		ParseData();
+
+
 		blikaj(vstup);
 		GPIO_ToggleBits(GPIOA, GPIO_Pin_5);	//zmena stavu
 		i++;
